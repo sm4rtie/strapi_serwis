@@ -1,0 +1,72 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<form>
+  <input type="hidden" id="userEmail" name="userEmail">
+  <div class="form-group">
+    <label for="formGroupExampleInput">Example label</label>
+    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+  </div>
+  <div class="form-group" name="order">
+  <label for="order">Which order do you want to ask about?</label>
+  <select name="orderInfo" id="orderInfo">
+    <div>
+  <option value="">Choose </option>
+      </div>
+  </select>
+  </div>
+  <div class="form-group">
+    <label for="message">Message</label>
+    <input type="text" class="form-control" id="message" name="message" placeholder="Message">
+  </div>
+  <input type="button" onclick=contact() value="Send">
+</form>
+<script>
+$( document ).ready(function() {
+  $.ajax({
+   url: "http://localhost:1337/order",
+   type: 'GET',
+   data: {
+     client: JSON.parse(sessionStorage.getItem("userEmail"))
+   },
+   dataType: 'json',
+   headers: {
+     'Authorization': 'Bearer '+ JSON.parse(sessionStorage.getItem("jwtToken"))
+   },
+   contentType: 'application/json; charset=utf-8',
+   success: function (order) {
+     console.log(sessionStorage.getItem("userinfo"));
+
+     order.forEach(function(order,index){
+       $('#orderInfo').append('<option value='+order._id+'>'+ order.product +' </option>')
+     });
+     console.log(order)
+     //window.location.replace("/me.html");
+   },
+   error: function (error) {
+     console.log(error);
+
+   }
+ });
+});
+function contact() {
+$.ajax({
+ url: "/contact",
+ type: 'POST',
+ data: {
+  client: JSON.parse(sessionStorage.getItem("userEmail")),
+  orderId: $('#orderInfo').val(),
+  message: $('#message').val()
+ },
+ headers: {
+   'Authorization': 'Bearer '+ JSON.parse(sessionStorage.getItem("jwtToken"))
+ },
+ success: function (data) {
+   console.log(data)
+   //window.location.replace("/me.html");
+ },
+ error: function (error) {
+   console.log(error);
+
+ }
+});
+}
+</script>

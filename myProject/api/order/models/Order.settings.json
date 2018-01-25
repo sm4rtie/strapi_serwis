@@ -1,0 +1,26 @@
+{
+  "connection": "default",
+  "collectionName": "",
+  "info": {
+    "name": "order",
+    "description": ""
+  },
+  "attributes": {
+    "client": {
+      "type": "email"
+    },
+    "employee": {
+      "type": "email"
+    },
+    "product": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "id": {
+      "model": "contact",
+      "via": "orderId"
+    }
+  }
+}

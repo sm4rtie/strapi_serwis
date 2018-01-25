@@ -1,0 +1,310 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Welcome to your Strapi app</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <style>
+      * {
+        -webkit-box-sizing: border-box;
+      }
+
+      body, html {
+        margin: 0;
+        padding: 40px 0;
+      }
+
+      body {
+        font: 17px/1.5 "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+        background: white;
+        margin: 0;
+        color: #33333d;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+
+      h1 {
+        font-size: 1.6em;
+        margin-top: 0;
+      }
+
+      h2 {
+        margin-top: 44px;
+        font-size: 1.3em;
+      }
+
+      h3 {
+        margin-top: 30px;
+        font-size: 1em;
+      }
+
+      section {
+        margin: 0 5.555555555555555%;
+      }
+
+      p {
+        font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+      }
+
+      a {
+        color: #33a0c0;
+      }
+
+      code {
+        font-family: monospace;
+        font-size: 1.1em;
+      }
+
+      pre {
+        background: white;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        padding: 25px;
+        font-family: monospace;
+        overflow-x: auto;
+      }
+
+      .wrapper {
+        padding: 0 .75em;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      @media screen and (min-width:40em) {
+        body {
+          font-size: 1.0625em;
+        }
+      }
+
+      @media screen and (min-width:45em) {
+        body {
+          font-size: 1em;
+        }
+      }
+
+      @media screen and (min-width:55.5em) {
+        body {
+          font-size: 1.0625em;
+        }
+      }
+
+      @media screen and (min-width:61.5em) {
+        body {
+          font-size: 1em;
+        }
+        section {
+          margin: 0 16.666666666666664%;
+        }
+      }
+
+      @media screen and (min-width:75em) {
+        body {
+          font-size: 1.0625em;
+        }
+      }
+
+      @media screen and (min-width:87em) {
+        body {
+          font-size: 1em;
+        }
+        section {
+          margin: 0 27.77777777777778%;
+        }
+      }
+
+      @media screen and (min-width:105em) {
+        body {
+          font-size: 1.0625em;
+        }
+      }
+
+      @media screen and (min-width:117em) {
+        section {
+          margin: 0 5.555555555555555%;
+        }
+        section .wrapper {
+          width: 37.5%;
+          margin-left: 25%;
+        }
+      }
+
+      @media screen and (min-width:130em) {
+        body {
+          font-size: 1.125em;
+          max-width: 160em;
+        }
+      }
+    </style>
+  </head>
+  <body lang="en">
+    <section>
+      <div class="wrapper">
+        <div>
+          <!--<form method="post" action="/auth/local">-->
+          <form><!-- action="#" onsubmit="sendLogIn()">-->
+          <div>
+          <label for="identifier">username: </label>
+          <input type="identifier" name="identifier" id="identifier">
+          </div>
+          <div>
+            <label for="password">Password: </label>
+            <input type="password" name="password" id="password">
+          </div>
+          <!--<input id="login" type="submit" class="button" value="Log in">-->
+            <input type="button" onclick="sendLogIn()" value="Log in">
+          </form>
+          <input type="button" onclick="forgotPass()" value="Forgot pass">
+          <input type="button" onclick="contact()" value="Contact">
+
+        </div>
+        <script>
+        function contact(){
+            $.ajax({
+              xhrFields: {
+                withCredentials: true
+              },
+              headers: {
+                'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem("jwtToken"))
+              },
+              url: "/contact.html"
+              //url: window.location.href("/user/me")
+            });
+          window.location = "/contact.html"
+        }
+        function forgotPass(){
+          $.ajax({
+            type: 'POST',
+            url: '/auth/forgot-password',
+            data: {
+              email: 'marta.jareckaa@gmail.com',
+              url: 'http://localhost:1337/rest-password'
+            },
+            done: function() {
+              console.log('Your user received an email');
+              window.location.href("/me.html");
+            },
+            fail: function(error) {
+              console.log('An error occurred:', error);
+            }
+          });
+        }
+          function sendLogIn() {
+           /*$.post( "http://localhost:1337/auth/local",{identifier: $('#identifier').val(), password: $('#password').val()}, function( data ) {
+              console.log(data);
+              headers: {
+                'Authorization': 'Bearer '+ data.jwt,
+              }
+              window.location.replace("/user/me?Bearer="+data.jwt);
+              $.get("http://localhost:1337/user/me")
+               $.ajax({
+                 url: "http://localhost:1337/user/me",
+                 type: 'GET',
+                 dataType: 'json',
+                 headers: {
+                   'Authorization': 'Bearer '+data.jwt
+                 },
+                 contentType: 'application/json; charset=utf-8',
+                 success: function (result) {
+                   // CallBack(result);
+                   console.log(result)
+                   //window.location.replace("/me.html");
+                 },
+                 error: function (error) {
+
+                 }
+               });
+            });*/
+            $.ajax({
+              type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+              url: '/auth/local', // the url where we want to POST
+              data: {
+                identifier: $('#identifier').val(),
+                password: $('#password').val()
+              }, // our data object
+              dataType: 'json', // what type of data do we expect back from the server
+              encode: true
+            }).done(function(data){ //any name you put in as an argument here will be the json response string.
+              sessionStorage.setItem("jwtToken", JSON.stringify(data.jwt));
+              sessionStorage.setItem("userId", JSON.stringify(data.user._id));
+              sessionStorage.setItem("userEmail", JSON.stringify(data.user.email));
+
+              console.log(data);
+            //  sessionStorage.setItem("userId", JSON.stringify(data.id));
+
+              //document.cookie = "jwtToken=" +data.jwt;
+              //console.log(data.user._id)
+              //window.location.href("/me.html")
+              $.ajaxSetup({
+                headers: {
+                  'Authorization': 'Bearer ' + data.jwt
+                },
+                global: true
+              });
+              $.ajax({
+                xhrFields: {
+                  withCredentials: true
+                },
+                headers: {
+                  'Authorization': 'Bearer ' + data.jwt
+                },
+            //    url: "/me.html"
+              url: "/profile"
+            });
+            window.location = "profile"
+            //window.location = "/me.html"
+            //window.location = "/profile"
+            }).error(function(errorData){
+              console.log(errorData)
+            });
+
+
+
+
+            //$("login").click(function () {
+              /*$.ajax({
+                type: 'GET',
+                url: 'http://localhost:1337/auth/local',
+                data: {
+                  identifier: $('#identifier').val(),
+                  password: $('#password').val()
+                },
+                done: function (data) {
+                  //sessionStorage.setItem("token",data.jwt);
+                  window.location.href("/user/me");
+                },
+                fail: function (error) {
+                  console.log('An error occurred:', error);
+
+                }
+
+              });*/
+            //});
+          }
+        </script>
+        <h1>Welcome.</h1>
+        <p>You successfully created your Strapi application.</p>
+        <p>You are looking at: <code>./public/index.html</code>.</p>
+        <p>User <a href="http://localhost:1337/user/me/" target="blank">http://localhost:1337/user/me/</a>.
+
+        <p>Your built-in admin panel is available at <a href="http://localhost:1337/admin/" target="blank">http://localhost:1337/admin/</a>.
+        <h2>Create your first API</h2>
+        <p>Easily generate a complete API with controllers, models and routes using:</p>
+        <pre><code class="lang-bash">$ strapi generate:api &lt;apiName&gt;</code></pre>
+        <h2>Resources</h2>
+        <p>You'll probably also want to learn how to customize your application, set up security and configure your data sources.</p>
+        <p>For more help getting started, check out:
+          <ul>
+            <li><a href="http://strapi.io/documentation/introduction" target="blank">Documentation</a></li>
+            <li><a href="https://github.com/strapi/strapi" target="blank">Repository on GitHub</a></li>
+            <li><a href="https://twitter.com/strapijs" target="blank">news on Twitter</a></li>
+            <li><a href="http://slack.strapi.io" target="blank">Real-time support on Slack</a></li>
+          </ul>
+        </p>
+      </div>
+    </section>
+  </body>
+</html>

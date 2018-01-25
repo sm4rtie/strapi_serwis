@@ -1,0 +1,229 @@
+<!doctype html>
+
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Welcome to your Strapi app</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <style>
+    * {
+      -webkit-box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 40px 0;
+    }
+
+    body {
+      font: 17px/1.5 "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+      background: white;
+      margin: 0;
+      color: #33333d;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      font-size: 1.6em;
+      margin-top: 0;
+    }
+
+    h2 {
+      margin-top: 44px;
+      font-size: 1.3em;
+    }
+
+    h3 {
+      margin-top: 30px;
+      font-size: 1em;
+    }
+
+    section {
+      margin: 0 5.555555555555555%;
+    }
+
+    p {
+      font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+    }
+
+    a {
+      color: #33a0c0;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 1.1em;
+    }
+
+    pre {
+      background: white;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      padding: 25px;
+      font-family: monospace;
+      overflow-x: auto;
+    }
+
+    .wrapper {
+      padding: 0 .75em;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    @media screen and (min-width:40em) {
+      body {
+        font-size: 1.0625em;
+      }
+    }
+
+    @media screen and (min-width:45em) {
+      body {
+        font-size: 1em;
+      }
+    }
+
+    @media screen and (min-width:55.5em) {
+      body {
+        font-size: 1.0625em;
+      }
+    }
+
+    @media screen and (min-width:61.5em) {
+      body {
+        font-size: 1em;
+      }
+      section {
+        margin: 0 16.666666666666664%;
+      }
+    }
+
+    @media screen and (min-width:75em) {
+      body {
+        font-size: 1.0625em;
+      }
+    }
+
+    @media screen and (min-width:87em) {
+      body {
+        font-size: 1em;
+      }
+      section {
+        margin: 0 27.77777777777778%;
+      }
+    }
+
+    @media screen and (min-width:105em) {
+      body {
+        font-size: 1.0625em;
+      }
+    }
+
+    @media screen and (min-width:117em) {
+      section {
+        margin: 0 5.555555555555555%;
+      }
+      section .wrapper {
+        width: 37.5%;
+        margin-left: 25%;
+      }
+    }
+
+    @media screen and (min-width:130em) {
+      body {
+        font-size: 1.125em;
+        max-width: 160em;
+      }
+    }
+  </style>
+</head>
+<body lang="en">
+<section>
+  <div class="wrapper">
+    <script>
+      /*$.get( "http://localhost:1337/user/me",{ function( data ) {
+          console.log(data);
+          $.ajax({
+            url: "http://localhost:1337/user/me",
+            type: 'GET',
+            dataType: 'json',
+            headers: {
+              'Authorization': 'Bearer ' + data.jwt
+            },
+            contentType: 'application/json; charset=utf-8',
+            success: function (result) {
+              $('p').append(result.email);
+              // CallBack(result);
+              console.log(result)
+              //window.location.replace("/me.html");
+            },
+            error: function (error) {
+
+            }
+          });
+        }
+      });*/ $.ajax({
+        url: "http://localhost:1337/user/me",
+        type: 'GET',
+        dataType: 'json',
+        headers: {
+          'Authorization': 'Bearer '+ JSON.parse(sessionStorage.getItem("jwtToken"))
+        },
+        contentType: 'application/json; charset=utf-8',
+        success: function (result) {
+          $('#email').append(result.email);
+          $('#userId').append(result.email);
+          console.log(result)
+          //window.location.replace("/me.html");
+        },
+        error: function (error) {
+          console.log(JSON.parse(sessionStorage.getItem("jwtToken")));
+
+        }
+      });
+
+     $.ajax({
+      url: "http://localhost:1337/order",
+      type: 'GET',
+      data: {
+        client: $('#userId').val()
+      },
+      dataType: 'json',
+      headers: {
+        'Authorization': 'Bearer '+ JSON.parse(sessionStorage.getItem("jwtToken"))
+      },
+      contentType: 'application/json; charset=utf-8',
+      success: function (order) {
+        order.forEach(function(item,index){
+          $('#orderInfo').append('<tr>'+
+      '<td>'+item.employee+'</td>'+
+      '<td>'+item._id+'</td>'+
+      '<td>'+item.status+'</td>'+
+      '<td>'+item.product+'</td>'+
+      '</tr>')
+        });
+        $('#product').append(order[0].product);
+        console.log(order)
+        //window.location.replace("/me.html");
+      },
+      error: function (error) {
+        console.log(JSON.parse(sessionStorage.getItem("jwtToken")));
+
+      }
+    });
+    </script>
+    <p id="email">email:  </p>
+    <p id="product">product: </p>
+    <table id="orderInfo" name="orderInfo">
+      <tbody>
+      </tbody>
+    </table>
+    <input type="hidden" id="userId" name="userId">
+  </div>
+</section>
+</body>
+</html>
